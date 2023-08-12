@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        *{
+            padding:0;
+            margin:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            width:100%;
+            min-height:100vh;
+            position:relative;
+           
+            background: rgb(34,193,195);
+            background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%); 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container{
+            max-width:100%;
+            padding:10px;
+            /* border:1px solid red; */
+            position:relative;
+            width:100%;
+            height:100%;
+            margin:0 auto;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            
+        }
+
+        .player-container{
+            width:100%;
+           
+            /* border:1px solid blue; */
+            text-align:center;
+        }
+
+        .player-container > h1{
+            margin-bottom:1rem;
+        }
+
+
+        .image-container{
+            max-width:400px;
+            padding:10px;
+            /* border:1px solid black; */
+            margin:0 auto;
+        }
+
+        .player-container .option-container span{
+            display:inline-block;
+            background-color:rgb(255, 111, 0);
+            color:white;
+            
+            padding:8px;
+            margin-top:1rem;
+            margin-left:10px;
+            cursor:pointer;
+            transition: all .3s ease;
+        }
+
+        .player-container .option-container span:hover{
+            background-color:green;
+            color:white;
+        }
+
+        .player-container .option-container span.active{
+            background-color:green;
+            color:white;
+        }
+
+        
+
+        .player-container .option-container span:first-child{
+            margin-left:0;
+        }
+
+        #play{
+
+            font-size:2rem;
+            padding:5px;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            transition:all .3s ease;
+            
+        }
+
+        #play:hover{
+            transform:translateY(-5px);
+            box-shadow:-3px 5px 15px rgb(101, 100, 100);
+
+        }
+
+
+        .image-container img{
+            width:100%;
+        }
+
+        .winner-box{
+            max-width:60%;
+            
+            display:flex;
+            align-items:center;
+            justify-content:space-around;
+            gap:10px;
+            /* border:1px solid black; */
+            position:absolute;
+            top:0;
+            left:-100%;
+            color:white;
+            /* background: rgb(34,193,195);
+            background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);  */
+            border-top-right-radius: 10px;
+            border-bottom-right-radius:10px;
+            backdrop-filter: blur(20px);
+            transition:all .3s ease;
+            border:1px solid rgb(83, 81, 81);
+            padding:5px;
+          
+            
+        }
+
+        .winner-box.visible{
+            left:0;
+            top:20px;
+
+        }
+
+        .hide{
+            display:none;
+        }
+
+        #reset-btn{
+            font-size:18px;
+            padding:5px;
+            background-color:rgb(243, 163, 163);
+            border:none;
+            transition:all .3s ease;
+            cursor:pointer;
+        }
+
+        #reset-btn:hover{
+            
+            transition:all .3se ease;
+            background-color:red;
+            color:white;
+        }
+
+
+
+
+        @media screen and (max-width:468px){
+            .container{
+                display:block;
+                text-align:center;
+            }
+
+            .player-container{
+                max-width:150px;
+                margin:0 auto;
+            }
+
+            #play{
+                margin:1rem auto;
+            }
+
+            .option-container{
+                /* border:1px solid black; */
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                
+            }
+
+            
+        }
+
+
+
+
+    </style>
+    
+</head>
+
+<body>
+    <div class="container">
+        <div class="player-container" id="player">
+            <h1>You</h1>
+            <div class="image-container">
+                <img src="./image/rock.png" class="image" id="user-image" alt="image">
+            </div>
+            <div class="option-container">
+            <span class="btn user-option" data-value="rock">Rock</span>
+            <span class="btn user-option" data-value="paper">Paper</span>
+            <span class="btn user-option" data-value="scissors">Scissor</span>
+            </div>
+            
+        </div>
+        <button id="play"><span>Battle</span>
+            <img src="./image/sword.png" style="width:32px" height="32px"/>
+        </button>
+        <div class="player-container" id="computer">
+            <h1>Computer</h1>
+            <div class="image-container" >
+                <img src="./image/paper.png" class="image" id="comp-image" alt="image">
+            </div>
+            <div class="option-container">
+            <span class="btn comp-option" data-value="rock">Rock</span>
+            <span class="btn comp-option" data-value="paper">Paper</span>
+            <span class="btn comp-option" data-value="scissors">Scissor</span>
+            </div>
+            
+        </div>
+        
+    </div>
+    <div class="winner-box">
+        <h3 id="winner">winner</h3> 
+        <div>
+            <button id="reset-btn">close
+                
+            </button>
+        </div>
+        
+    </div>
+    <script>
+
+        //user player-container
+        const image = document.getElementById('user-image')
+        const userOptions = document.querySelectorAll('.user-option')
+        let userChoice;
+
+        //computer player-container
+        const compImage = document.getElementById('comp-image')
+        const compOptions = document.querySelectorAll('.comp-option')
+        let compChoice
+
+        //play button
+        const playBtn = document.getElementById('play')
+
+        //winner box
+        const winnerBox = document.querySelector('.winner-box')
+        const winnerTitle = document.getElementById('winner')
+
+        //reset-btn
+        const resetBtn = document.getElementById('reset-btn')
+
+        
+
+
+
+        userOptions.forEach(option=>{
+            
+            option.addEventListener("click",()=>{
+                
+                userOptions.forEach(btn=>{
+                    btn.classList.remove('active')
+                })
+                userChoice = option.dataset.value
+                // console.log(userChoice)
+                option.classList.add('active')
+                image.setAttribute('src',`./image/${option.dataset.value}.png`)
+                
+            })
+        })
+
+
+        //computer logic
+        function selectComputerChoice(){
+            
+            const choices = ['rock','paper','scissors'];
+            const randNum = Math.floor(Math.random()*3);
+            compChoice = choices[randNum]
+            // console.log(compChoice)
+
+            compImage.setAttribute('src',`./image/${compChoice}.png`)
+
+            compOptions.forEach(option=>{
+                option.classList.remove('active')
+                if(option.dataset.value === compChoice){
+                    option.classList.add('active')
+                }
+            })
+
+        }
+
+        //checking the main logic of the game
+        function checkWinner(user,comp){
+           
+                if(user==comp){
+                return "Game Draw"
+            }
+            else if(user=='rock' && comp=='scissors' || user=='scissors' && comp=='paper' || user=='paper' && comp=='rock'){
+                return "You win"
+            }
+            else{
+                return "Computer Win"
+            }
+            
+          
+        }
+
+        //battle button functionality
+
+        function battleStart(){
+            if(userChoice){
+                selectComputerChoice()
+                const winner = checkWinner(userChoice,compChoice)
+            
+                winnerTitle.innerHTML = winner
+                winnerBox.classList.add('visible')
+            }
+            else{
+                alert("Select Your Option First")
+            }
+          
+            
+           
+            
+
+        }
+
+        //reset game functionality
+
+        function resetGame(){
+            winnerBox.classList.remove('visible')
+
+        }
+
+        resetBtn.addEventListener('click',resetGame)
+
+
+
+
+
+        playBtn.addEventListener('click',battleStart)
+
+
+
+        
+
+
+    </script>
+</body>
+</html>
