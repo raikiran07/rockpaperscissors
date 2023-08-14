@@ -471,8 +471,10 @@
 
         //reset scores functionality
         function resetScore(){
-            localStorage.setItem('userScore',0)
-            localStorage.setItem('computerScore',0)
+            userScore = 0
+            computerScore = 0
+            localStorage.setItem('userScore',userScore)
+            localStorage.setItem('computerScore',computerScore)
             userScoreDiv.innerText = 0
             compScoreDiv.innerText = 0
         }
