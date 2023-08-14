@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>RPS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
@@ -159,10 +159,79 @@
             color:white;
         }
 
+        /*
+        styling the score container
+        */
+
+        .score-container{
+            border:1px solid black;
+            max-width:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            margin:2rem auto;
+            /* min-height:100px; */
+            padding:10px;
+            border-radius:5px;
+            background-color:rgba(253, 187, 45, 0.871);
+            color:#fff;
+            font-size:2rem;
+        }
+
+        /*
+        styling the reset game button
+         */
+
+         .reset-game-container{
+            max-width:300px;
+            font-size:1.2rem;
+            padding:8px;
+            border:none;
+            outline:none;
+            border-radius:3px;
+            position:absolute;
+            top:10px;
+            left:50%;
+            transform:translateX(-50%);
+            cursor:pointer;
+            
+         }
+         #reset-game{
+            padding:10px;
+            background-color:rgb(248, 86, 86);
+            border:none;
+            outline:none;
+            cursor:pointer;
+            border-top-left-radius:3px;
+            border-bottom-left-radius:3px;
+            transition:all .3s ease;
+            border-radius:5px;
+         }
+
+         #reset-game:hover{
+            background-color:red;
+            color:white;
+         }
+
 
 
 
         @media screen and (max-width:468px){
+
+           .reset-game-container{
+         
+            right:0;
+            transform:none;
+            text-align:right;
+            padding:0;
+           }
+
+           #reset-game{
+            padding:5px;
+           }
+
+
+
             .container{
                 display:block;
                 text-align:center;
@@ -184,6 +253,8 @@
                 justify-content:center;
                 
             }
+
+           
 
             
         }
@@ -207,6 +278,11 @@
             <span class="btn user-option" data-value="paper">Paper</span>
             <span class="btn user-option" data-value="scissors">Scissor</span>
             </div>
+            <div class="score-container">
+                <span id="user-score">
+                    0
+                </span>
+            </div>
             
         </div>
         <button id="play"><span>Battle</span>
@@ -222,6 +298,11 @@
             <span class="btn comp-option" data-value="paper">Paper</span>
             <span class="btn comp-option" data-value="scissors">Scissor</span>
             </div>
+            <div class="score-container">
+                <span id="comp-score">
+                    0
+                </span>
+            </div>
             
         </div>
         
@@ -235,6 +316,12 @@
         </div>
         
     </div>
+    <div class="reset-game-container">
+        <button id="reset-game">
+            Reset Game
+        </button>
+    </div>
+    
     <script>
 
         //user player-container
@@ -256,6 +343,33 @@
 
         //reset-btn
         const resetBtn = document.getElementById('reset-btn')
+
+        // storing scores in local storage
+        let userScore = localStorage.getItem('userScore') ? Number(localStorage.getItem('userScore')) : 0
+        let computerScore = localStorage.getItem('computerScore') ? Number(localStorage.getItem('computerScore')) : 0;
+
+        //grabing the score element
+        const userScoreDiv = document.getElementById('user-score')
+        const compScoreDiv = document.getElementById('comp-score')
+
+        //grabing the reset-game element
+        const resetScoreBtn = document.getElementById('reset-game')
+
+
+
+        
+
+        
+
+        
+        localStorage.setItem('userScore',userScore)
+        localStorage.setItem('computerScore',computerScore)
+
+        
+        userScoreDiv.innerText = userScore
+        compScoreDiv.innerText = computerScore
+
+        
 
         
 
@@ -303,9 +417,15 @@
                 return "Game Draw"
             }
             else if(user=='rock' && comp=='scissors' || user=='scissors' && comp=='paper' || user=='paper' && comp=='rock'){
+                userScore += 1
+                userScoreDiv.innerText = userScore
+                localStorage.setItem('userScore',userScore)
                 return "You win"
             }
             else{
+                computerScore += 1
+                compScoreDiv.innerText = computerScore
+                localStorage.setItem('computerScore',computerScore)
                 return "Computer Win"
             }
             
@@ -332,6 +452,17 @@
 
         }
 
+        //reset scores functionality
+        function resetScore(){
+            localStorage.setItem('userScore',0)
+            localStorage.setItem('computerScore',0)
+            userScoreDiv.innerText = 0
+            compScoreDiv.innerText = 0
+        }
+
+
+
+
         //reset game functionality
 
         function resetGame(){
@@ -339,13 +470,12 @@
 
         }
 
+
+
+
         resetBtn.addEventListener('click',resetGame)
-
-
-
-
-
         playBtn.addEventListener('click',battleStart)
+        resetScoreBtn.addEventListener('click',resetScore)
 
 
 
