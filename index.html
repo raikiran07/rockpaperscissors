@@ -52,7 +52,7 @@
 
 
         .image-container{
-            max-width:400px;
+            max-width:300px;
             padding:10px;
             /* border:1px solid black; */
             margin:0 auto;
@@ -64,7 +64,7 @@
             color:white;
             
             padding:8px;
-            margin-top:1rem;
+            margin-top:-1rem;
             margin-left:10px;
             cursor:pointer;
             transition: all .3s ease;
@@ -165,18 +165,20 @@
 
         .score-container{
             border:1px solid black;
-            max-width:50%;
+            max-width:30%;
             display:flex;
             align-items:center;
             justify-content:center;
             margin:2rem auto;
-            /* min-height:100px; */
-            padding:10px;
+           
+            padding:10px 5px;
             border-radius:5px;
             background-color:rgba(253, 187, 45, 0.871);
             color:#fff;
             font-size:2rem;
         }
+
+       
 
         /*
         styling the reset game button
@@ -238,8 +240,14 @@
             }
 
             .player-container{
-                max-width:150px;
+                max-width:120px;
                 margin:0 auto;
+                
+            }
+
+            #computer h1{
+                display:block;
+                margin-left:-1rem;
             }
 
             #play{
@@ -253,6 +261,15 @@
                 justify-content:center;
                 
             }
+
+            .score-container{
+                max-height:80px;
+                max-width:80px;
+            }
+
+           
+
+            
 
            
 
@@ -278,7 +295,7 @@
             <span class="btn user-option" data-value="paper">Paper</span>
             <span class="btn user-option" data-value="scissors">Scissor</span>
             </div>
-            <div class="score-container">
+            <div class="score-container" id="user-score-container">
                 <span id="user-score">
                     0
                 </span>
@@ -298,7 +315,7 @@
             <span class="btn comp-option" data-value="paper">Paper</span>
             <span class="btn comp-option" data-value="scissors">Scissor</span>
             </div>
-            <div class="score-container">
+            <div class="score-container" id="comp-score-container">
                 <span id="comp-score">
                     0
                 </span>
